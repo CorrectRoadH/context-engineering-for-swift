@@ -1,0 +1,76 @@
+name: Build Release ZIP
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-zip:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Create ZIP package
+      run: |
+        # 创建临时目录
+        mkdir -p temp_package
+        
+        # 复制主要文件
+        cp README.md temp_package/
+        cp CLAUDE.md temp_package/
+        cp INITIAL.md temp_package/
+        cp INITIAL_EXAMPLE.md temp_package/
+        cp LICENSE temp_package/
+        cp install.sh temp_package/
+        
+        # 复制.claude目录
+        cp -r .claude temp_package/
+        
+        # 复制examples目录
+        cp -r examples temp_package/
+        
+        # 复制PRPs目录
+        cp -r PRPs temp_package/
+        
+        # 创建ZIP文件
+        zip -r context-engineering-for-swift.zip temp_package/
+        
+        # 清理临时目录
+        rm -rf temp_package/
+        
+    - name: Upload ZIP artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: context-engineering-for-swift
+        path: context-engineering-for-swift.zip
+        retention-days: 30
+        
+    - name: Create Release
+      if: github.event_name == 'push'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: context-engineering-for-swift.zip
+        tag_name: v${{ github.run_number }}
+        name: Release v${{ github.run_number }}
+        body: |
+          ## 自动构建的ZIP包
+          
+          包含以下内容：
+          - README.md
+          - CLAUDE.md
+          - INITIAL.md
+          - INITIAL_EXAMPLE.md
+          - LICENSE
+          - install.sh
+          - .claude/ 目录
+          - examples/ 目录
+          - PRPs/ 目录
+          
+          构建时间: ${{ github.event.head_commit.timestamp }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
