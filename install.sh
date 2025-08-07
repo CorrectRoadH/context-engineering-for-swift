@@ -8,7 +8,7 @@
 set -e
 
 # Define download URL and filenames
-URL="https://github.com/CorrectRoadH/context-engineering-for-swift/archive/refs/heads/main.zip"
+URL="https://github.com/CorrectRoadH/context-engineering-for-swift/releases/latest/download/context-engineering-for-swift.zip"
 ZIP_FILE="main.zip"
 # The directory name created after extraction, usually "repository-name-branch-name"
 EXTRACTED_DIR="context-engineering-for-swift-main"

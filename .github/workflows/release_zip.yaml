@@ -18,22 +18,30 @@ jobs:
         # 创建临时目录
         mkdir -p temp_package
         
-        # 复制主要文件
-        cp README.md temp_package/
-        cp CLAUDE.md temp_package/
-        cp INITIAL.md temp_package/
-        cp INITIAL_EXAMPLE.md temp_package/
-        cp LICENSE temp_package/
-        cp install.sh temp_package/
+        # 定义排除的文件和目录
+        EXCLUDE_PATTERNS=(
+          ".git"
+          ".github"
+          ".gitignore"
+          ".gitattributes"
+          "README.md"
+          ".DS_Store"
+          "LICENSE"
+          "install.sh"
+          "*.log"
+          ".env*"
+          "temp_package"
+          "*.zip"
+        )
         
-        # 复制.claude目录
-        cp -r .claude temp_package/
+        # 构建rsync排除参数
+        EXCLUDE_ARGS=""
+        for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+          EXCLUDE_ARGS="$EXCLUDE_ARGS --exclude=$pattern"
+        done
         
-        # 复制examples目录
-        cp -r examples temp_package/
-        
-        # 复制PRPs目录
-        cp -r PRPs temp_package/
+        # 使用rsync复制所有文件，排除指定的文件和目录
+        rsync -av $EXCLUDE_ARGS ./ temp_package/
         
         # 创建ZIP文件
         zip -r context-engineering-for-swift.zip temp_package/
@@ -58,16 +66,14 @@ jobs:
         body: |
           ## 自动构建的ZIP包
           
-          包含以下内容：
-          - README.md
-          - CLAUDE.md
-          - INITIAL.md
-          - INITIAL_EXAMPLE.md
-          - LICENSE
-          - install.sh
-          - .claude/ 目录
-          - examples/ 目录
-          - PRPs/ 目录
+          包含项目的所有必要文件，排除了以下内容：
+          - .git 目录
+          - .github 工作流目录
+          - node_modules
+          - .DS_Store 文件
+          - 日志文件 (*.log)
+          - 环境变量文件 (.env*)
+          - 临时文件和构建产物
           
           构建时间: ${{ github.event.head_commit.timestamp }}
         draft: false
