@@ -10,8 +10,8 @@ set -e
 # Define download URL and filenames
 URL="https://github.com/CorrectRoadH/context-engineering-for-swift/releases/latest/download/context-engineering-for-swift.zip"
 ZIP_FILE="main.zip"
-# The directory name created after extraction, usually "repository-name-branch-name"
-EXTRACTED_DIR="context-engineering-for-swift-main"
+# The directory name created after extraction. This name is based on how the release asset is created.
+EXTRACTED_DIR="temp_package"
 
 echo "Downloading from $URL..."
 # -L: Follow redirects

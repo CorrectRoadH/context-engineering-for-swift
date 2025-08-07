@@ -88,31 +88,8 @@ When creating new tests:
 
 ## Common Validation Commands by Language
 
-### JavaScript/TypeScript
-```bash
-npm run lint          # or: npx eslint .
-npm run typecheck     # or: npx tsc --noEmit
-npm run test         # or: npx jest
-npm run test:coverage # Check coverage
-npm run build        # Verify build
-```
+### Swift/Xcode
 
-### Python
-```bash
-ruff check .         # Linting
-mypy .              # Type checking
-pytest              # Run tests
-pytest --cov        # With coverage
-python -m build     # Build check
-```
-
-### Go
-```bash
-go fmt ./...        # Format
-go vet ./...        # Linting
-go test ./...       # Run tests
-go build .          # Build validation
-```
 
 ## Quality Metrics to Track
 

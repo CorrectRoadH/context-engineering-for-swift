@@ -32,6 +32,7 @@ jobs:
           ".env*"
           "temp_package"
           "*.zip"
+          "claude-code-full-guide"
         )
         
         # 构建rsync排除参数
